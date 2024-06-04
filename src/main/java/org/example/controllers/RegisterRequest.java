@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.models.user.Role;
 
 @Data
 @Builder
@@ -12,7 +13,6 @@ import lombok.NoArgsConstructor;
 public class RegisterRequest {
     String username;
     String password;
-    String firstName;
-    String lastName;
+    String email;
     String country;
 }

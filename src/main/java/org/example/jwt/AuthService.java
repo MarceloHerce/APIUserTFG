@@ -5,9 +5,7 @@ import org.example.controllers.AuthResponse;
 import org.example.controllers.JwtService;
 import org.example.controllers.LoginRequest;
 import org.example.controllers.RegisterRequest;
-import org.example.models.user.Role;
-import org.example.models.user.User;
-import org.example.models.user.UserRepository;
+import org.example.models.user.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +22,7 @@ public class AuthService {
     private  final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final AccesTypeRepository accesTypeRepository;
 
     public AuthResponse login(LoginRequest request) {
         authenticationManager.authenticate(
@@ -40,11 +39,11 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request) {
         User user = User.builder()
                 .userName(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
+                .userPassword(passwordEncoder.encode(request.getPassword()))
+                .email(request.getEmail())
                 .country(request.getCountry())
                 .role(Role.USER)
+                .accessType(accesTypeRepository.findByDescription(AccesType.WEB_LOGIN))
                 .build();
 
         userRepository.save(user);

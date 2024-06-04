@@ -17,22 +17,42 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"userName"})})
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id"})})
 public class User implements UserDetails {
     @Id
-    @GeneratedValue
-    @Column(nullable = false)
-    Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name= "user_id", nullable = false)
+    Long userId;
+
+    @Column(name = "user_name")
     String userName;
-    String lastName;
-    String firstName;
+
+    @Column(name = "email")
+    String email;
+
+
     String country;
-    String password;
+
+    @Column(name = "user_password")
+    String userPassword;
+
     Role role;
+
+    @ManyToOne
+    @JoinColumn(name = "x_access_type_id", referencedColumnName = "access_type_id")
+    AccesType accessType;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<Media> mediaList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return userPassword;
     }
 
     @Override
