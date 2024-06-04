@@ -23,4 +23,8 @@ public class AuthController {
     public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request){
         return ResponseEntity.ok(authService.register(request));
     }
+    @PostMapping(value = "register/google")
+    public ResponseEntity<AuthResponse> registerGoogle(@RequestBody RegisterRequest request){
+        return ResponseEntity.ok(authService.registerGoogle(request));
+    }
 }
