@@ -42,5 +42,4 @@ jobs:
                               --build-arg AZURE_BLOB_STORAGE_CONTAINER_NAME="${{ secrets.AZURE_BLOB_STORAGE_CONTAINER_NAME }}" \
                               --build-arg AZURE_STORAGE_ACCOUNT_NAME="${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}" \
                               --build-arg AZURE_BLOB_STORAGE_ENDPOINT="${{ secrets.AZURE_BLOB_STORAGE_ENDPOINT }}" \
-                              -t ${{ secrets.DOCKERUSERNAME }}/apiusers:latest -f Dockerfile .
-          docker push ${{ secrets.DOCKERUSERNAME }}/apiusers:latest
+                              -t ${{ secrets.DOCKERUSERNAME }}/apiusers:latest -f Dockerfile --push .
