@@ -26,7 +26,7 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean package
-        
+
       - name: Display environment variables
         run: |
           echo "spring.application.name=ApiUsers"
