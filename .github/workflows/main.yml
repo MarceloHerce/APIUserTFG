@@ -5,7 +5,7 @@ on:
     branches: ['main']
   pull_request:
     branches: ['main']
-  workflow_dispatch:
+  workflow_dispatch:  # Añadir esto para permitir ejecución manual
 
 jobs:
   build:
@@ -26,10 +26,24 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean package
-
-      - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKERPASSWORD }}" | docker login -u ${{ secrets.DOCKERUSERNAME }} --password-stdin
-
+        
+      - name: Display environment variables
+        run: |
+          echo "spring.application.name=ApiUsers"
+          echo "spring.jpa.hibernate.ddl-auto=update"
+          echo "spring.datasource.url=${{ secrets.DATABASE_URL }}"
+          echo "spring.datasource.username=${{ secrets.DATABASE_USERNAME }}"
+          # NO HAGAS ECHO DE CONTRASEÑAS Y CLAVES
+          echo "spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect"
+          echo "azureBlobStorageConnectionString=${{ secrets.AZURE_BLOB_STORAGE_CONNECTION_STRING }}"
+          echo "azureBlobStorageContainerName=${{ secrets.AZURE_BLOB_STORAGE_CONTAINER_NAME }}"
+          echo "spring.cloud.azure.storage.blob.account-name=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}"
+          echo "spring.cloud.azure.storage.name=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}"
+          echo "spring.cloud.azure.storage.connection.string=${{ secrets.AZURE_BLOB_STORAGE_CONNECTION_STRING }}"
+          echo "spring.cloud.azure.storage.blob.endpoint=${{ secrets.AZURE_BLOB_STORAGE_ENDPOINT }}"
+          echo "spring.servlet.multipart.max-file-size=5MB"
+          echo "spring.servlet.multipart.max-request-size=5MB"
+          
       - name: Create application.properties file
         run: |
           echo "spring.application.name=ApiUsers" >> src/main/resources/application.properties
@@ -46,6 +60,9 @@ jobs:
           echo "spring.cloud.azure.storage.blob.endpoint=${{ secrets.AZURE_BLOB_STORAGE_ENDPOINT }}" >> src/main/resources/application.properties
           echo "spring.servlet.multipart.max-file-size=5MB" >> src/main/resources/application.properties
           echo "spring.servlet.multipart.max-request-size=5MB" >> src/main/resources/application.properties
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERPASSWORD }}" | docker login -u ${{ secrets.DOCKERUSERNAME }} --password-stdin
 
       - name: Build and push Docker image for API Users
         run: |
