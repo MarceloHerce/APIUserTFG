@@ -1,0 +1,63 @@
+name: Build and Deploy API Users
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Print repository status
+        run: git log -1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERPASSWORD }}" | docker login -u ${{ secrets.DOCKERUSERNAME }} --password-stdin
+
+      - name: Create application.properties file
+        run: |
+          echo "spring.application.name=ApiUsers" >> src/main/resources/application.properties
+          echo "spring.jpa.hibernate.ddl-auto=update" >> src/main/resources/application.properties
+          echo "spring.datasource.url=${{ secrets.DATABASE_URL }}" >> src/main/resources/application.properties
+          echo "spring.datasource.username=${{ secrets.DATABASE_USERNAME }}" >> src/main/resources/application.properties
+          echo "spring.datasource.password=${{ secrets.DATABASE_PASSWORD }}" >> src/main/resources/application.properties
+          echo "spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect" >> src/main/resources/application.properties
+          echo "azureBlobStorageConnectionString=${{ secrets.AZURE_BLOB_STORAGE_CONNECTION_STRING }}" >> src/main/resources/application.properties
+          echo "azureBlobStorageContainerName=${{ secrets.AZURE_BLOB_STORAGE_CONTAINER_NAME }}" >> src/main/resources/application.properties
+          echo "spring.cloud.azure.storage.blob.account-name=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}" >> src/main/resources/application.properties
+          echo "spring.cloud.azure.storage.name=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}" >> src/main/resources/application.properties
+          echo "spring.cloud.azure.storage.connection.string=${{ secrets.AZURE_BLOB_STORAGE_CONNECTION_STRING }}" >> src/main/resources/application.properties
+          echo "spring.cloud.azure.storage.blob.endpoint=${{ secrets.AZURE_BLOB_STORAGE_ENDPOINT }}" >> src/main/resources/application.properties
+          echo "spring.servlet.multipart.max-file-size=5MB" >> src/main/resources/application.properties
+          echo "spring.servlet.multipart.max-request-size=5MB" >> src/main/resources/application.properties
+
+      - name: Build and push Docker image for API Users
+        run: |
+          docker build -t ${{ secrets.DOCKERUSERNAME }}/apiusers:latest -f Dockerfile .
+          docker push ${{ secrets.DOCKERUSERNAME }}/apiusers:latest
+
+      # Deploy to Kubernetes (optional)
+      # - name: Configure kubectl
+      #   uses: azure/k8s-set-context@v1
+      #   with:
+      #     kubeconfig: ${{ secrets.KUBE_CONFIG }}
+
+      # - name: Apply Kubernetes manifests
+      #   run: |
+      #     kubectl apply -f k8s-deployment.yaml -n resultados-space
