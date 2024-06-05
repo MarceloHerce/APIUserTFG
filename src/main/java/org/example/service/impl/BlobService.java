@@ -112,7 +112,8 @@ public class BlobService {
                 // Obtener metadatos del blob
                 String fileName = containerClient.getBlobClient(blobItem.getName()).getProperties().getMetadata().get("fileName");
                 log.info("metadata: "+fileName);
-                BlobInfoDTO blobInfo = new BlobInfoDTO(sasUrl, fileName);
+                String storageFileName = blobItem.getName();
+                BlobInfoDTO blobInfo = new BlobInfoDTO(sasUrl, fileName, storageFileName);
                 blobInfos.add(blobInfo);
             }
         } catch (Exception e) {

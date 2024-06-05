@@ -8,4 +8,5 @@ import lombok.Data;
 public class BlobInfoDTO {
     private String sasUrl;
     private String fileName;
+    private String storageFileName;
 }
