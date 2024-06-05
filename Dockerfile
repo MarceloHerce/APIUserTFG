@@ -8,10 +8,13 @@ WORKDIR /app
 COPY target/ApiUsers-1.0-SNAPSHOT.jar app.jar
 
 # Copiar el archivo de propiedades
-COPY src/main/resources/application.properties /app/src/main/resources/application.properties
+COPY entrypoint.sh /app/entrypoint.sh
+
+# Hacer el script ejecutable
+RUN chmod +x /app/entrypoint.sh
 
 # Exponer el puerto en el que se ejecutará la aplicación Spring Boot
 EXPOSE 8080
 
 # Comando para ejecutar la aplicación
-CMD ["java", "-jar", "app.jar"]
+CMD ["/app/entrypoint.sh"]
