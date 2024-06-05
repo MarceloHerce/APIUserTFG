@@ -5,7 +5,7 @@ on:
     branches: ['main']
   pull_request:
     branches: ['main']
-  workflow_dispatch:  # Añadir esto para permitir ejecución manual
+  workflow_dispatch:  # Permitir ejecución manual
 
 jobs:
   build:
@@ -32,15 +32,12 @@ jobs:
 
       - name: Build and push Docker image for API Users
         run: |
-          docker build -t ${{ secrets.DOCKERUSERNAME }}/apiusers:latest -f Dockerfile .
+          docker build --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
+                       --build-arg DATABASE_USERNAME=${{ secrets.DATABASE_USERNAME }} \
+                       --build-arg DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
+                       --build-arg AZURE_BLOB_STORAGE_CONNECTION_STRING=${{ secrets.AZURE_BLOB_STORAGE_CONNECTION_STRING }} \
+                       --build-arg AZURE_BLOB_STORAGE_CONTAINER_NAME=${{ secrets.AZURE_BLOB_STORAGE_CONTAINER_NAME }} \
+                       --build-arg AZURE_STORAGE_ACCOUNT_NAME=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }} \
+                       --build-arg AZURE_BLOB_STORAGE_ENDPOINT=${{ secrets.AZURE_BLOB_STORAGE_ENDPOINT }} \
+                       -t ${{ secrets.DOCKERUSERNAME }}/apiusers:latest -f Dockerfile .
           docker push ${{ secrets.DOCKERUSERNAME }}/apiusers:latest
-
-      # Deploy to Kubernetes (optional)
-      # - name: Configure kubectl
-      #   uses: azure/k8s-set-context@v1
-      #   with:
-      #     kubeconfig: ${{ secrets.KUBE_CONFIG }}
-
-      # - name: Apply Kubernetes manifests
-      #   run: |
-      #     kubectl apply -f k8s-deployment.yaml -n resultados-space
