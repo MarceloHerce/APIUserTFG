@@ -61,6 +61,13 @@ jobs:
           echo "spring.servlet.multipart.max-file-size=5MB" >> src/main/resources/application.properties
           echo "spring.servlet.multipart.max-request-size=5MB" >> src/main/resources/application.properties
 
+      - name: Verify application.properties file
+        run: |
+          echo "Verifying application.properties content (excluding sensitive values)"
+          grep -v 'password' src/main/resources/application.properties
+          grep -v 'connection.string' src/main/resources/application.properties
+          grep -v 'azureBlobStorageConnectionString' src/main/resources/application.properties
+
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKERPASSWORD }}" | docker login -u ${{ secrets.DOCKERUSERNAME }} --password-stdin
 
