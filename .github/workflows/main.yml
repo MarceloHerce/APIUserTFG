@@ -27,47 +27,6 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
-      - name: Display environment variables
-        run: |
-          echo "spring.application.name=ApiUsers"
-          echo "spring.jpa.hibernate.ddl-auto=update"
-          echo "spring.datasource.url=${{ secrets.DATABASE_URL }}"
-          echo "spring.datasource.username=${{ secrets.DATABASE_USERNAME }}"
-          # NO HAGAS ECHO DE CONTRASEÑAS Y CLAVES
-          echo "spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect"
-          echo "azureBlobStorageConnectionString=${{ secrets.AZURE_BLOB_STORAGE_CONNECTION_STRING }}"
-          echo "azureBlobStorageContainerName=${{ secrets.AZURE_BLOB_STORAGE_CONTAINER_NAME }}"
-          echo "spring.cloud.azure.storage.blob.account-name=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}"
-          echo "spring.cloud.azure.storage.name=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}"
-          echo "spring.cloud.azure.storage.connection.string=${{ secrets.AZURE_BLOB_STORAGE_CONNECTION_STRING }}"
-          echo "spring.cloud.azure.storage.blob.endpoint=${{ secrets.AZURE_BLOB_STORAGE_ENDPOINT }}"
-          echo "spring.servlet.multipart.max-file-size=5MB"
-          echo "spring.servlet.multipart.max-request-size=5MB"
-          
-      - name: Create application.properties file
-        run: |
-          echo "spring.application.name=ApiUsers" >> src/main/resources/application.properties
-          echo "spring.jpa.hibernate.ddl-auto=update" >> src/main/resources/application.properties
-          echo "spring.datasource.url=${{ secrets.DATABASE_URL }}" >> src/main/resources/application.properties
-          echo "spring.datasource.username=${{ secrets.DATABASE_USERNAME }}" >> src/main/resources/application.properties
-          echo "spring.datasource.password=${{ secrets.DATABASE_PASSWORD }}" >> src/main/resources/application.properties
-          echo "spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect" >> src/main/resources/application.properties
-          echo "azureBlobStorageConnectionString=${{ secrets.AZURE_BLOB_STORAGE_CONNECTION_STRING }}" >> src/main/resources/application.properties
-          echo "azureBlobStorageContainerName=${{ secrets.AZURE_BLOB_STORAGE_CONTAINER_NAME }}" >> src/main/resources/application.properties
-          echo "spring.cloud.azure.storage.blob.account-name=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}" >> src/main/resources/application.properties
-          echo "spring.cloud.azure.storage.name=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}" >> src/main/resources/application.properties
-          echo "spring.cloud.azure.storage.connection.string=${{ secrets.AZURE_BLOB_STORAGE_CONNECTION_STRING }}" >> src/main/resources/application.properties
-          echo "spring.cloud.azure.storage.blob.endpoint=${{ secrets.AZURE_BLOB_STORAGE_ENDPOINT }}" >> src/main/resources/application.properties
-          echo "spring.servlet.multipart.max-file-size=5MB" >> src/main/resources/application.properties
-          echo "spring.servlet.multipart.max-request-size=5MB" >> src/main/resources/application.properties
-
-      - name: Verify application.properties file
-        run: |
-          echo "Verifying application.properties content (excluding sensitive values)"
-          grep -v 'password' src/main/resources/application.properties
-          grep -v 'connection.string' src/main/resources/application.properties
-          grep -v 'azureBlobStorageConnectionString' src/main/resources/application.properties
-
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKERPASSWORD }}" | docker login -u ${{ secrets.DOCKERUSERNAME }} --password-stdin
 
