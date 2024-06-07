@@ -1,0 +1,49 @@
+name: Build and Deploy API Users
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+  workflow_dispatch:  # Permitir ejecución manual
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Print repository status
+        run: git log -1
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to Docker Hub
+        uses: azure/docker-login@v1
+        with:
+          login-server: marceloregistry.azurecr.io
+          username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
+          password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+
+      - name: Build and push Docker image for API Users
+        run: |
+          docker buildx build --build-arg DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+                              --build-arg DATABASE_USERNAME="${{ secrets.DATABASE_USERNAME }}" \
+                              --build-arg DATABASE_PASSWORD="${{ secrets.DATABASE_PASSWORD }}" \
+                              --build-arg AZURE_BLOB_STORAGE_CONNECTION_STRING="${{ secrets.AZURE_BLOB_STORAGE_CONNECTION_STRING }}" \
+                              --build-arg AZURE_BLOB_STORAGE_CONTAINER_NAME="${{ secrets.AZURE_BLOB_STORAGE_CONTAINER_NAME }}" \
+                              --build-arg AZURE_STORAGE_ACCOUNT_NAME="${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}" \
+                              --build-arg AZURE_BLOB_STORAGE_ENDPOINT="${{ secrets.AZURE_BLOB_STORAGE_ENDPOINT }}" \
+                              -t ${{ secrets.AZURE_REGISTRY_SERVER }}/apiusers:develop -f Dockerfile --push .
