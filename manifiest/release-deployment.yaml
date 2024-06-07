@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-release
+  namespace: release
+  labels:
+    app: micros
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: micros
+  template:
+    metadata:
+      labels:
+        app: micros
+    spec:
+      containers:
+        - name: api-screenrecorder
+          image: marceloregistry.azurecr.io/screenrecorder:develop
+          ports:
+            - containerPort: 80
+        - name: client-screenrecorder
+          image: marceloregistry.azurecr.io/apiusers:develop
+          ports:
+            - containerPort: 8080

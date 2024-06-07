@@ -59,6 +59,7 @@ public class AuthService {
         Optional<User> userExist = null;
         User user = null;
         try {
+            //buscar usuario por mail
             userExist = userRepository.findByUserName(request.getUsername());
             user = userExist.get();
         } catch (Exception e) {
