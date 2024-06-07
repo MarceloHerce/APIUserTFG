@@ -54,7 +54,7 @@ jobs:
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
       - name: Apply Kubernetes manifests for develop
-        if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/release'
         run: |
           kubectl apply -f release-namespace.yaml
           kubectl apply -f release-deployment.yaml
