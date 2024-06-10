@@ -59,3 +59,4 @@ jobs:
           kubectl apply -f manifest/production-namespace.yaml
           kubectl apply -f manifest/production-deployment.yaml
           kubectl apply -f manifest/production-services.yaml
+          kubectl rollout restart deployment/production-release --namespace=release

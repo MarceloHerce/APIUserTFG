@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("upload/media")
-@CrossOrigin(exposedHeaders = "Filename")
+@CrossOrigin(exposedHeaders = "Filename",origins = "*")
 public class UploadBlobController {
     private static final Logger log = LoggerFactory.getLogger(UploadBlobController.class);
 

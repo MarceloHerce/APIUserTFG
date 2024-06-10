@@ -14,11 +14,6 @@ spec:
         app: myapp
     spec:
       containers:
-        - name: client-screenrecorder
-          image: marceloregistry.azurecr.io/screenrecorder:latest
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 80
         - name: api-screenrecorder
           image: marceloregistry.azurecr.io/apiusers:latest
           imagePullPolicy: Always
