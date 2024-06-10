@@ -38,15 +38,8 @@ public class MediaService {
         }
     }
     public String generateFileName(String username) {
-        // Obtener la fecha y hora actual en el formato deseado
-        //SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        //Date date = new Date();
-        //String timestamp = formatter.format(date);
-
-        // Generar un UUID para asegurar la unicidad
         String uniqueID = UUID.randomUUID().toString();
 
-        // Construir el nombre del archivo
         String fileName = username + "_" + uniqueID + ".webm";
         return fileName;
     }
