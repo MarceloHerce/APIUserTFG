@@ -5,6 +5,7 @@ import org.example.controllers.AuthResponse;
 import org.example.controllers.JwtService;
 import org.example.controllers.LoginRequest;
 import org.example.controllers.RegisterRequest;
+import org.example.exceptions.UserAlreadyExistsException;
 import org.example.models.user.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,15 @@ public class AuthService {
     }
 
     public AuthResponse register(RegisterRequest request) {
+        Optional<User> existingUser = userRepository.findByUserName(request.getUsername());
+        if (existingUser.isPresent()) {
+            throw new UserAlreadyExistsException("Username already exists");
+        }
+
+        existingUser = userRepository.findByEmail(request.getEmail());
+        if (existingUser.isPresent()) {
+            throw new UserAlreadyExistsException("Email already exists");
+        }
         User user = User.builder()
                 .userName(request.getUsername())
                 .userPassword(passwordEncoder.encode(request.getPassword()))
@@ -59,8 +69,7 @@ public class AuthService {
         Optional<User> userExist = null;
         User user = null;
         try {
-            //buscar usuario por mail
-            userExist = userRepository.findByUserName(request.getUsername());
+            userExist = userRepository.findByEmail(request.getEmail());
             user = userExist.get();
         } catch (Exception e) {
             log.error(e.getMessage());

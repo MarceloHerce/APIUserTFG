@@ -1,11 +1,11 @@
-name: Build and Deploy API Users
+name: Build and Deploy API Users production
 
 on:
   push:
     branches: ['main']
   pull_request:
     branches: ['main']
-  workflow_dispatch:  # Permitir ejecución manual
+  workflow_dispatch:
 
 jobs:
   build:
@@ -30,8 +30,12 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKERPASSWORD }}" | docker login -u ${{ secrets.DOCKERUSERNAME }} --password-stdin
+      - name: Log in to Azure Container Registry using Docker
+        uses: azure/docker-login@v1
+        with:
+          login-server: marceloregistry.azurecr.io
+          username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
+          password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
 
       - name: Build and push Docker image for API Users
         run: |
@@ -42,7 +46,8 @@ jobs:
                               --build-arg AZURE_BLOB_STORAGE_CONTAINER_NAME="${{ secrets.AZURE_BLOB_STORAGE_CONTAINER_NAME }}" \
                               --build-arg AZURE_STORAGE_ACCOUNT_NAME="${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}" \
                               --build-arg AZURE_BLOB_STORAGE_ENDPOINT="${{ secrets.AZURE_BLOB_STORAGE_ENDPOINT }}" \
-                              -t ${{ secrets.DOCKERUSERNAME }}/apiusers:latest -f Dockerfile --push .
+                              -t ${{ secrets.AZURE_REGISTRY_SERVER }}/apiusers:latest -f Dockerfile --push .
+
       - name: Configure kubectl
         uses: azure/k8s-set-context@v1
         with:
@@ -51,6 +56,6 @@ jobs:
       - name: Apply Kubernetes manifests for production
         if: github.ref == 'refs/heads/main'
         run: |
-          kubectl apply -f manifiest/production-namespace.yaml
-          kubectl apply -f manifiest/production-deployment.yaml
-          kubectl apply -f manifiest/production-services.yaml
+          kubectl apply -f manifest/production-namespace.yaml
+          kubectl apply -f manifest/production-deployment.yaml
+          kubectl apply -f manifest/production-services.yaml

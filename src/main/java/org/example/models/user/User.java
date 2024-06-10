@@ -22,21 +22,21 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name= "user_id", nullable = false)
-    Long userId;
+    private Long userId;
 
     @Column(name = "user_name")
-    String userName;
+    private String userName;
 
     @Column(name = "email")
-    String email;
+    private String email;
 
 
-    String country;
+    private String country;
 
     @Column(name = "user_password")
-    String userPassword;
+    private String userPassword;
 
-    Role role;
+    private Role role;
 
     @ManyToOne
     @JoinColumn(name = "x_access_type_id", referencedColumnName = "access_type_id")
