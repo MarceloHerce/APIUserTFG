@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-@CrossOrigin
+@CrossOrigin(origins = "https://purple-wave-099029f03.5.azurestaticapps.net")
 public class AuthController {
     private final AuthService authService;
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
