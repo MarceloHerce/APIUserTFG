@@ -62,6 +62,5 @@ public class UploadBlobController {
             return ResponseEntity.badRequest().body("Invalid JSON format: " + e.getMessage());
         }
 
-        //return ResponseEntity.ok("Blocks committed successfully");
     }
 }
