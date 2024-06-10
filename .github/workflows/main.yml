@@ -51,6 +51,6 @@ jobs:
       - name: Apply Kubernetes manifests for production
         if: github.ref == 'refs/heads/main'
         run: |
-          kubectl apply -f manifiest/production-namespace.yaml
-          kubectl apply -f manifiest/production-deployment.yaml
-          kubectl apply -f manifiest/production-services.yaml
+          kubectl apply -f manifest/production-namespace.yaml
+          kubectl apply -f manifest/production-deployment.yaml
+          kubectl apply -f manifest/production-services.yaml

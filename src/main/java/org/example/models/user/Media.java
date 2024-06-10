@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users_media", uniqueConstraints = {@UniqueConstraint(columnNames = {"media_id"})})
+@Table(name = " users_media", uniqueConstraints = {@UniqueConstraint(columnNames = {"media_id"})})
 public class Media {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
