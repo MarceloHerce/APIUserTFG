@@ -3,9 +3,6 @@ kind: Service
 metadata:
   name: service-release
   namespace: release
-  annotations:
-    service.beta.kubernetes.io/azure-load-balancer-resource-group: IPLoadBalancer
-    service.beta.kubernetes.io/azure-load-balancer-ipv4: 4.180.76.14
 spec:
   type: LoadBalancer
   selector:

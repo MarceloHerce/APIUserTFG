@@ -58,4 +58,5 @@ jobs:
         run: |
           kubectl apply -f manifest/release-namespace.yaml
           kubectl apply -f manifest/release-deployment.yaml
+          kubectl rollout restart deployment/release-deployment --namespace=release
           kubectl apply -f manifest/release-services.yaml
