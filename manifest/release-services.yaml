@@ -10,8 +10,8 @@ spec:
   ports:
     - name: client-screenrecorder
       protocol: TCP
-      port: 80
-      targetPort: 80
+      port: 433
+      targetPort: 443
     - name: api-screenrecorder
       protocol: TCP
       port: 8080

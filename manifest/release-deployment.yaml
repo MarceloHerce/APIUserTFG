@@ -20,7 +20,7 @@ spec:
           image: marceloregistry.azurecr.io/screenrecorder:release
           imagePullPolicy: Always
           ports:
-            - containerPort: 80
+            - containerPort: 443
         - name: api-screenrecorder
           image: marceloregistry.azurecr.io/apiusers:release
           imagePullPolicy: Always
