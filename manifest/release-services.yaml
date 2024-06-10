@@ -8,11 +8,11 @@ spec:
   selector:
     app: micros
   ports:
-    - name: client-screenrecorder
+    - name: client-screenrecorder-r
       protocol: TCP
       port: 80
       targetPort: 80
-    - name: api-screenrecorder
+    - name: api-screenrecorder-r
       protocol: TCP
       port: 8080
       targetPort: 8080
