@@ -87,7 +87,7 @@ public class BlockBlobController {
             blobClient.getBlockBlobClient().stageBlock(blockId, inputStream, filePart.getSize());
         }catch (BlobStorageException e) {
             logger.error("Failed to upload block ID: {}. Error Code: {}, Message: {}", blockId, e.getStatusCode(), e.getMessage(), e);
-            throw e; // Rethrow to handle upstream or log detailed stack trace
+            throw e;
         }
         return blobClient.getBlobUrl();
     }

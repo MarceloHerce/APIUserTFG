@@ -46,7 +46,6 @@ public class UploadBlobService {
 
     /*----UPLOAD SERVICE----*/
     public String generateBlockId(int index) {
-        // Genera un Block ID único y consistente
         String rawBlockId = String.format("%05d-%s", index, UUID.randomUUID().toString());
         String blockId = Base64.getEncoder().encodeToString(rawBlockId.getBytes(StandardCharsets.UTF_8));
         log.info("Generated BlockId: " + blockId);
@@ -108,15 +107,12 @@ public class UploadBlobService {
             log.info("Block ID: " + block.getName() + ", Size: " + block.getSizeLong());
         }
 
-        // Log the blockListJson to ensure it is being received correctly
         log.info("Received blockListJson: " + blockListJson);
-        // Parse the blockListJson into a list of block IDs
         String cleanedBlockListJson = blockListJson
                 .replace("[", "")
                 .replace("]", "")
                 .replace("\"", "");
         List<String> blockList = List.of(cleanedBlockListJson.split(","));
-        // Log each block ID to ensure they are correct
         for (String blockId : blockList) {
             log.info("Block ID: " + blockId);
         }

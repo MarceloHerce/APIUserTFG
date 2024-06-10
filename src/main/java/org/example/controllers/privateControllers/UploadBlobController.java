@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("upload/media")
-@CrossOrigin(exposedHeaders = "Filename")
+@CrossOrigin(exposedHeaders = "Filename",origins = "*")
 public class UploadBlobController {
     private static final Logger log = LoggerFactory.getLogger(UploadBlobController.class);
 
@@ -62,6 +62,5 @@ public class UploadBlobController {
             return ResponseEntity.badRequest().body("Invalid JSON format: " + e.getMessage());
         }
 
-        //return ResponseEntity.ok("Blocks committed successfully");
     }
 }

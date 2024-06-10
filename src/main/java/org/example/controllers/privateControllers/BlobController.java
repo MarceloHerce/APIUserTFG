@@ -41,35 +41,6 @@ public class BlobController {
     @GetMapping("/{blobName}")
     public ResponseEntity<InputStreamResource> getVideo(@PathVariable String blobName) {
         return azureBlobStorageService.getMediaFromStorage(blobName);
-        /*// Connection string to your Azure Blob Storage account
-        String connectionString = "DefaultEndpointsProtocol=https;AccountName=videosrecorder;AccountKey=N+fC5MNlMYmznkVwwy67Wq53nd6mM8Y6e6/RqBaEEBnwHkGT64QxztP4EOC2fUr86WFcSz3vEWnv+ASti9Jalw==;EndpointSuffix=core.windows.net";
-        String containerName = "videocontainer";
-        String blobName = "grabacionDemo.webm"; // Replace with the name of your video file
-
-        // Create BlobServiceClient
-        BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
-                .connectionString(connectionString)
-                .buildClient();
-
-        // Get the container
-        BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(containerName);
-
-        // Get the blob
-        BlobClient blobClient = containerClient.getBlobClient(blobName);
-
-        // Check if the blob exists
-        if (!blobClient.exists()) {
-            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
-        }
-
-        // Get the blob content
-        InputStreamResource inputStreamResource = new InputStreamResource(blobClient.openInputStream());
-
-        // Return the blob as ResponseEntity
-        return ResponseEntity.ok()
-                .contentLength(blobClient.getProperties().getBlobSize())
-                .contentType(org.springframework.http.MediaType.valueOf("video/webm"))
-                .body(inputStreamResource);/*/
     }
 
     private static final Logger log = LoggerFactory.getLogger(BlobController.class);
@@ -78,32 +49,7 @@ public class BlobController {
     @PostMapping("")
     public ResponseEntity<String> uploadVideo(@RequestParam("file") MultipartFile file) {
         return azureBlobStorageService.uploadMediaToStorage(file);
-        /*// Connection string to your Azure Blob Storage account
-        String connectionString = "DefaultEndpointsProtocol=https;AccountName=videosrecorder;AccountKey=N+fC5MNlMYmznkVwwy67Wq53nd6mM8Y6e6/RqBaEEBnwHkGT64QxztP4EOC2fUr86WFcSz3vEWnv+ASti9Jalw==;EndpointSuffix=core.windows.net";
-        String containerName = "videocontainer";
 
-        // Create BlobServiceClient
-        BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
-                .connectionString(connectionString)
-                .buildClient();
-
-        // Get the container
-        BlobContainerClient containerClient = blobServiceClient.getBlobContainerClient(containerName);
-
-        // Get the filename
-        String filename = file.getOriginalFilename();
-
-        // Upload the blob
-        try (InputStream is = file.getInputStream()) {
-            BlobClient blobClient = containerClient.getBlobClient(filename);
-            blobClient.upload(is, file.getSize(), true);
-            LOGGER.info("Uploaded file: {}", filename);
-        } catch (IOException ex) {
-            LOGGER.error("Error uploading file", ex);
-            return new ResponseEntity<>("Error uploading file", HttpStatus.I_AM_A_TEAPOT);
-        }
-
-        return new ResponseEntity<>("File uploaded successfully", HttpStatus.OK);*/
     }
     @PostMapping("/prueba")
     public String prueba() {
@@ -120,9 +66,7 @@ public class BlobController {
 
         String base64BlockId = Base64.getEncoder().encodeToString(blockId.getBytes());
         log.info("base64BlockID:" + base64BlockId);
-        // Obtener InputStream del MultipartFile y envolverlo en un BufferedInputStream
         try (InputStream inputStream = new BufferedInputStream(chunk.getInputStream())) {
-            // Subir el chunk como un bloque
             blobClient.stageBlock(base64BlockId, inputStream, chunk.getSize());
         } catch (Exception e){
             throw e;
@@ -148,7 +92,6 @@ public class BlobController {
         try (ReadableByteChannel channel = Channels.newChannel(file.getInputStream())) {
             byteBuffer = ByteBuffer.allocate((int) file.getSize());
             while (channel.read(byteBuffer) > 0) {
-                // leer el canal en el buffer
             }
             byteBuffer.flip();
         }
