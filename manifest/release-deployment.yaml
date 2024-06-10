@@ -16,7 +16,6 @@ spec:
         app: micros
     spec:
       containers:
-        - name: api-screenrecorder
           image: marceloregistry.azurecr.io/apiusers:release
           imagePullPolicy: Always
           ports:

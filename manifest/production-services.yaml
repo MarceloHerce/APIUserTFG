@@ -6,9 +6,9 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-    app: micros
+    app: micros-production
   ports:
     - name: api-screenrecorder
       protocol: TCP
-      port: 8080
+      port: 8081
       targetPort: 8080
