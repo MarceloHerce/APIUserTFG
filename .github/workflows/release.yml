@@ -1,11 +1,11 @@
-name: Build and Deploy API Users develop
+name: Build and Deploy API Users release
 
 on:
   push:
     branches: ['release']
   pull_request:
     branches: ['release']
-  workflow_dispatch:  # Permitir ejecución manual
+  workflow_dispatch:
 
 jobs:
   build:
@@ -30,7 +30,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Log in to Docker Hub
+      - name: Log in to Azure Container Registry using Docker
         uses: azure/docker-login@v1
         with:
           login-server: marceloregistry.azurecr.io
@@ -59,4 +59,3 @@ jobs:
           kubectl apply -f manifest/release-namespace.yaml
           kubectl apply -f manifest/release-deployment.yaml
           kubectl apply -f manifest/release-services.yaml
-
