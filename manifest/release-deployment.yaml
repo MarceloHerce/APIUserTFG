@@ -16,11 +16,11 @@ spec:
         app: micros
     spec:
       containers:
-        - name: api-screenrecorder-r
+        - name: client-screenrecorder-r
           image: marceloregistry.azurecr.io/screenrecorder:release
           ports:
             - containerPort: 80
-        - name: client-screenrecorder-r
+        - name: api-screenrecorder-r
           image: marceloregistry.azurecr.io/apiusers:release
           ports:
             - containerPort: 8080
