@@ -7,11 +7,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: myapp
+      app: micros-production
   template:
     metadata:
       labels:
-        app: myapp
+        app: micros-production
     spec:
       containers:
         - name: api-screenrecorder
