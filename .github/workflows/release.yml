@@ -56,7 +56,7 @@ jobs:
       - name: Apply Kubernetes manifests for develop
         if: github.ref == 'refs/heads/release'
         run: |
+          kubectl rollout restart deployment/deployment-release --namespace=release
           kubectl apply -f manifest/release-namespace.yaml
           kubectl apply -f manifest/release-deployment.yaml
           kubectl apply -f manifest/release-services.yaml
-          kubectl rollout restart deployment/release-deployment --namespace=release
